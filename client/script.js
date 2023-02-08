@@ -95,7 +95,7 @@ const handleSubmit = async (e) => {
     // messageDiv.innerHTML = "..."
     loader(messageDiv);
 
-    const response = await fetch(import.meta.env.SERVER_URL, {
+    const response = await fetch(import.meta.env.VITE_SERVER_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
