@@ -40,16 +40,21 @@ app.post('/', async (req, res) => {
             bot: response.data.choices[0].text,
         });
     } catch (error) {
-        console.log(error.response.status === 429);
         if (error.response.status === 429) {
             return res.status(429).send({
                 status: 429,
                 message: 'Too many request, please wait!',
             });
         }
+        if (error.response.status === 401) {
+            return res.status(401).send({
+                status: 401,
+                message: 'Đứa mô chơi mất dạy xóa API KEY của tui gùi!',
+            });
+        }
         res.status(500).send({
             status: 500,
-            message: 'Interval Server Error!',
+            message: 'Something went wrong, please try again later.',
         });
     }
 });

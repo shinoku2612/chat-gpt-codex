@@ -30,11 +30,9 @@ function typeText(element, text) {
     }, 500);
     let interval = setInterval(() => {
         if (index < text.length) {
-            disable = true;
             element.innerHTML += text.charAt(index);
             index++;
         } else {
-            disable = false;
             chatContainer.scrollTop = chatContainer.scrollHeight;
             clearInterval(interval);
             clearInterval(scrollInterval);
@@ -76,6 +74,8 @@ const handleSubmit = async (e) => {
 
     const data = new FormData(form);
 
+    if (!data.get('prompt')) return;
+
     // user's chatstripe
     chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
 
@@ -95,7 +95,7 @@ const handleSubmit = async (e) => {
     // messageDiv.innerHTML = "..."
     loader(messageDiv);
 
-    const response = await fetch('https://shin-codex.onrender.com', {
+    const response = await fetch('http://localhost:5000/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -122,6 +122,7 @@ const handleSubmit = async (e) => {
             messageDiv.innerHTML = 'Something went wrong!';
         }
     }
+    disable = false;
 };
 
 input.addEventListener('keydown', (e) => {
