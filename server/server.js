@@ -44,7 +44,7 @@ app.post('/', async (req, res) => {
         if (errorStatus === 429) {
             return res.status(429).send({
                 status: 429,
-                message: 'Too many request, please wait!',
+                message: 'Hiện tại tui đang bị quá tải. Trời ơi cú tui cú tui!',
             });
         }
         if (errorStatus === 401) {
@@ -55,7 +55,7 @@ app.post('/', async (req, res) => {
         }
         res.status(errorStatus).send({
             status: errorStatus,
-            message: 'Something went wrong, please try again later.',
+            message: 'Mắc mệt, nghỉ xíu rồi quay lợi.',
         });
     }
 });
