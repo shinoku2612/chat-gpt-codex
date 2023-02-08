@@ -50,7 +50,7 @@ app.post('/', async (req, res) => {
         if (errorStatus === 401) {
             return res.status(401).send({
                 status: 401,
-                message: 'Đứa mô chơi mất dạy xóa API KEY của tui gùi!',
+                message: 'Đứa mô chơi mất dạy xóa API KEY của tui gùi! Feedback cho tui biết để tui fix nhá.',
             });
         }
         res.status(errorStatus).send({

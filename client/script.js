@@ -116,11 +116,7 @@ const handleSubmit = async (e) => {
         typeText(messageDiv, parsedData);
     } else {
         const error = await response.json();
-        if (error.status === 429) {
-            messageDiv.innerHTML = error.message;
-        } else {
-            messageDiv.innerHTML = 'Something went wrong!';
-        }
+        messageDiv.innerHTML = error.message;
     }
     disable = false;
 };
