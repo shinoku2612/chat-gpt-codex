@@ -13,10 +13,7 @@ const openAi = new OpenAIApi(configuration);
 const app = express();
 app.use(
     cors({
-        origin: [
-            'https://chat-gpt-codex-umber.vercel.app',
-            'http://127.0.0.1:5173',
-        ],
+        origin: '*',
     }),
 );
 app.use(express.json());
