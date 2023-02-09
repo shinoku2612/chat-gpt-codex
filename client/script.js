@@ -1,5 +1,8 @@
 import bot from './assets/bot.svg';
 import user from './assets/user.svg';
+import DetectLanguage from 'detectlanguage';
+
+const detectlanguage = new DetectLanguage('2e6418dcb21d33e304463b333a62a9c9');
 
 const form = document.querySelector('form');
 const input = document.querySelector('textarea');
@@ -110,10 +113,30 @@ const handleSubmit = async (e) => {
 
     if (response.ok) {
         const data = await response.json();
-        console.log({ data, response });
         const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
 
-        typeText(messageDiv, parsedData);
+        detectlanguage
+            .detect(parsedData)
+            .then((lang) => {
+                if (responsiveVoice.voiceSupport()) {
+                    switch (lang.language) {
+                        case 'vi':
+                            responsiveVoice.speak(
+                                parsedData,
+                                'Vietnamese Female',
+                            );
+                            break;
+                        case 'en':
+                        default:
+                            responsiveVoice.speak(
+                                parsedData,
+                                'US English Female',
+                            );
+                    }
+                }
+                typeText(messageDiv, parsedData);
+            })
+            .catch((error) => console.log(error));
     } else {
         const error = await response.json();
         messageDiv.innerHTML = error.message;
