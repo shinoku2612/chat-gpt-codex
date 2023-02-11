@@ -110,38 +110,18 @@ const handleSubmit = async (e) => {
 
     clearInterval(loadInterval);
     messageDiv.innerHTML = '';
+    let responseMessage = '';
 
     if (response.ok) {
         const data = await response.json();
-        const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
-
-        detectlanguage
-            .detect(parsedData)
-            .then((lang) => {
-                if (responsiveVoice.voiceSupport()) {
-                    switch (lang.language) {
-                        case 'vi':
-                            responsiveVoice.speak(
-                                parsedData,
-                                'Vietnamese Female',
-                            );
-                            break;
-                        case 'en':
-                        default:
-                            responsiveVoice.speak(
-                                parsedData,
-                                'US English Female',
-                            );
-                    }
-                }
-                typeText(messageDiv, parsedData);
-            })
-            .catch((error) => console.log(error));
+        responseMessage = data.bot.trim(); // trims any trailing spaces/'\n'
     } else {
         const error = await response.json();
-        messageDiv.innerHTML = error.message;
+        responseMessage = error.message;
     }
     disable = false;
+
+    textToSpeechAndTyping(messageDiv, responseMessage, 1000);
 };
 
 input.addEventListener('keydown', (e) => {
@@ -156,3 +136,24 @@ form.addEventListener('keyup', (e) => {
         handleSubmit(e);
     }
 });
+
+function textToSpeechAndTyping(element, text, typingDelay) {
+    detectlanguage
+        .detectCode(text)
+        .then((code) => {
+            if (responsiveVoice.voiceSupport()) {
+                switch (code) {
+                    case 'vi':
+                        responsiveVoice.speak(text, 'Vietnamese Female');
+                        break;
+                    case 'en':
+                    default:
+                        responsiveVoice.speak(text, 'US English Female');
+                }
+            }
+            setTimeout(() => {
+                typeText(element, text);
+            }, typingDelay);
+        })
+        .catch((error) => console.log(error));
+}
